@@ -4,7 +4,7 @@
  *
  * Heimir Sverrisson, 2015-04-13
  *
- * Portions Copyright (c) 2021, TOSHIBA CORPORATION
+ * Portions Copyright (c) 2021, TOSHIBA F
  *
  * ---------------------------------------------
  */
@@ -377,7 +377,7 @@ static Jconn *
 jdbc_create_JDBC_connection(const ForeignServer * server, const UserMapping * user)
 {
 	jmethodID	idCreate;
-	jstring		stringArray[6];
+	jstring		stringArray[4];
 	jclass		javaString;
 	jobjectArray argArray;
 	jclass		JDBCUtilsClass;
@@ -425,10 +425,8 @@ jdbc_create_JDBC_connection(const ForeignServer * server, const UserMapping * us
 	snprintf(querytimeout_string, intSize, "%d", opts.querytimeout);
 	stringArray[0] = (*Jenv)->NewStringUTF(Jenv, opts.drivername);
 	stringArray[1] = (*Jenv)->NewStringUTF(Jenv, opts.url);
-	stringArray[2] = (*Jenv)->NewStringUTF(Jenv, opts.username);
-	stringArray[3] = (*Jenv)->NewStringUTF(Jenv, opts.password);
-	stringArray[4] = (*Jenv)->NewStringUTF(Jenv, querytimeout_string);
-	stringArray[5] = (*Jenv)->NewStringUTF(Jenv, opts.jarfile);
+	stringArray[2] = (*Jenv)->NewStringUTF(Jenv, querytimeout_string);
+	stringArray[3] = (*Jenv)->NewStringUTF(Jenv, opts.jarfile);
 	/* Set up the return value */
 	javaString = (*Jenv)->FindClass(Jenv, "java/lang/String");
 	argArray = (*Jenv)->NewObjectArray(Jenv, numParams, javaString, stringArray[0]);
@@ -1304,8 +1302,7 @@ jq_get_exception()
 		exceptionMsg = (jstring) (*Jenv)->CallObjectMethod(Jenv, exc, exceptionMsgID);
 		exceptionString = jdbc_convert_string_to_cstring((jobject) exceptionMsg);
 		err_msg = pstrdup(exceptionString);
-		ereport(ERROR, (errmsg("remote server returned an error")));
-		ereport(ERROR, (errmsg("%s", err_msg)));
+		ereport(ERROR, (errmsg("exceptionString %s", err_msg)));
 	}
 	return;
 }

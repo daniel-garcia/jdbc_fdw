@@ -57,10 +57,8 @@ public class JDBCUtils {
     Driver jdbcDriver = null;
     String driverClassName = options[0];
     String url = options[1];
-    String userName = options[2];
-    String password = options[3];
-    String qTimeoutValue = options[4];
-    String fileName = options[5];
+    String qTimeoutValue = options[2];
+    String fileName = options[3];
 
     queryTimeoutValue = Integer.parseInt(qTimeoutValue);
     exceptionStringWriter = new StringWriter();
@@ -77,8 +75,6 @@ public class JDBCUtils {
       jdbcDriverClass = jdbcDriverLoader.loadClass(driverClassName);
       jdbcDriver = (Driver) jdbcDriverClass.newInstance();
       jdbcProperties = new Properties();
-      jdbcProperties.put("user", userName);
-      jdbcProperties.put("password", password);
       /* get connection from cache */
       if (ConnectionHash.containsKey(key)) {
         conn = ConnectionHash.get(key);
